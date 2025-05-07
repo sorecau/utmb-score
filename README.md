@@ -1,1 +1,1 @@
-# utmb-score
+# UTMB score
