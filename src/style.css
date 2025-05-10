@@ -25,7 +25,7 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  place-items: flex-start;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -59,10 +59,21 @@ button:focus-visible {
 }
 
 #app {
+  min-height: 80vh;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
+  display: flex;
+  gap: 2rem; /* space between columns */
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  flex-wrap: wrap; /* allow wrapping on small screens */
+}
+
+.column {
+  width: 550px;
+  min-width: 300px;
 }
 
 @media (prefers-color-scheme: light) {
@@ -75,5 +86,12 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+@media (max-width: 768px) {
+  #app {
+    flex-direction: column;
+    text-align: center;
   }
 }
