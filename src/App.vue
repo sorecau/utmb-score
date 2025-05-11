@@ -13,7 +13,7 @@
 
       <input
           type="file"
-          accept=".csv"
+          accept="text/plain,.csv"
           @change="handleFileUpload"
           class="block mx-auto mt-4 text-sm text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
       />
@@ -73,7 +73,7 @@
         ></path>
       </svg>
       <p class="text-lg font-medium">No results yet</p>
-      <p class="text-sm">Upload a CSV file to see scores.</p>
+      <p class="text-sm">Upload a text file to see scores.</p>
     </div>
   </template>
 </template>
