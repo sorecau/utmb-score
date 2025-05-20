@@ -36,7 +36,7 @@
           </thead>
           <tbody class="divide-y divide-gray-200">
           <tr
-              v-for="(item, index) in results"
+              v-for="(item, index) in results.slice(0, 10)"
               :key="index"
           >
             <td class="px-4 py-3">{{ item.fullname }}</td>
@@ -44,13 +44,24 @@
             <td class="px-4 py-3">{{ item.nationality }}</td>
             <td class="px-4 py-3">{{ item.sex === 'H' ? 'Men' : item.sex === 'F' ? 'Women' : '' }}</td>
           </tr>
+          <!-- Ellipsis row -->
+          <tr>
+            <td class="px-4 py-3 text-center italic text-gray-400" colspan="4">...</td>
+          </tr>
+
+          <!-- Total results row -->
+          <tr>
+            <td class="px-4 py-3 font-semibold" colspan="4">
+              Total results: {{ results.length }}
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
 
       <button
           class="mt-6 inline-flex items-center px-5 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-lg shadow"
-          @click="downloadCSV"
+          @click="downloadXLSX"
       >
         Download Results
       </button>
@@ -81,6 +92,7 @@
 <script setup lang="ts">
 import Papa from 'papaparse'
 import {ref} from 'vue'
+import * as XLSX from 'xlsx'
 
 const results = ref([])
 
@@ -100,6 +112,7 @@ const handleFileUpload = (event) => {
 }
 
 const fetchUTMBScore = async (runners) => {
+  // const url = "http://localhost:8080/api/score"
   const url = "https://utmb-score-ws.onrender.com/api/score"
 
   await new Promise(resolve => setTimeout(resolve, 300))
@@ -136,6 +149,25 @@ const downloadCSV = () => {
   link.click()
   document.body.removeChild(link)
 }
+
+const downloadXLSX = () => {
+  const headers = ['Name', 'Score', 'Nationality', 'Gender'];
+
+  const data = results.value.map(item => {
+    return {
+      Name: item.fullname,
+      Score: item.ip,
+      Nationality: item.nationality,
+      Gender: item.sex === 'H' ? 'Men' : item.sex === 'F' ? 'Woman' : '',
+    };
+  });
+
+  const worksheet = XLSX.utils.json_to_sheet(data, { header: headers });
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Runners');
+
+  XLSX.writeFile(workbook, 'runners-scores.xlsx');
+};
 </script>
 
 <style scoped>
